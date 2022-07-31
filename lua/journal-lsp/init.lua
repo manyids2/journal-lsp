@@ -14,12 +14,13 @@ M.setup = function ()
 
   -- 2. is it 'journal' dir?
   local root_dir = (vim.fs.dirname(vim.fs.find({
-      'index.md'
+      'index.md', 'README.md'
     }, {upward = true})[1]))
   if (root_dir) then
     M.root_dir = root_dir
     M.enabled = true
   else
+    require("index.md not found.")
     return
   end
 
