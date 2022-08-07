@@ -1,0 +1,25 @@
+================================================================================
+INTRODUCTION                                                      *journal-lsp*
+
+journal-lsp.nvim is a plugin looking to replace telekasten.nvim to prevent
+declaring new filetypes.
+
+Getting started with journal-lsp:
+  1. Create an index.md or README.md at the root of dir you want to enable
+     journal-lsp for.
+  2. Enable it with `:lua require("journal-lsp").setup()`
+
+A practical introduction into journal-lsp customization can be found in
+README.md and `:h journal-lsp`.
+
+To find out more:
+https://github.com/manyids2/journal-lsp.nvim
+
+================================================================================
+journal-lsp.setup({opts})                                 *journal-lsp.setup()*
+    Setup function to be run by user.
+
+    Usage:
+    >
+    require('journal-lsp').setup{}
+<
