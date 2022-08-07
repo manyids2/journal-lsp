@@ -26,7 +26,7 @@ function actions.find_files(root_dir, title)
 	require("telescope.builtin").find_files(opts_with_preview)
 end
 
-function actions.insert_link()
+function actions.add_note()
 	local a = vim.api
 	local win = a.nvim_get_current_win()
 	local cursor = a.nvim_win_get_cursor(win)
@@ -34,12 +34,14 @@ function actions.insert_link()
 		if input == nil then
 			return
 		end
+		-- replace space with hyphens
+		input = string.gsub(input, "%s", "-")
 		a.nvim_buf_set_text(
 			0,
 			cursor[1] - 1,
-			cursor[2] + 0,
+			cursor[2] + 1,
 			cursor[1] - 1,
-			cursor[2] + 0,
+			cursor[2] + 1,
 			{ "[" .. input .. "](notes/" .. input .. ".md)" }
 		)
 	end)

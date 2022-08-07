@@ -56,24 +56,34 @@ M.setup = function()
 		actions.find_files(M.root_dir .. "/weekly", "~ weekly ~")
 	end
 
-	M.insert_link = function()
-		actions.insert_link()
+	M.add_note = function()
+		actions.add_note()
 	end
 
 	M.goto_link = function()
 		actions.goto_link()
 	end
 
-	local mappings = {
+	local nmappings = {
 		["<C-a>f"] = "files()",
 		["<C-a>d"] = "daily()",
 		["<C-a>w"] = "weekly()",
-		["<C-a>i"] = "insert_link()",
 		["<C-a>g"] = "goto_link()",
 	}
 
-	for k, v in pairs(mappings) do
+	local imappings = {
+		["<C-a>i"] = "add_note()",
+	}
+
+	for k, v in pairs(nmappings) do
 		vim.api.nvim_set_keymap("n", k, ':lua require"journal-lsp".' .. v .. "<cr>", {
+			noremap = true,
+			silent = true,
+		})
+	end
+
+	for k, v in pairs(imappings) do
+		vim.api.nvim_set_keymap("i", k, '<Esc>:lua require"journal-lsp".' .. v .. "<cr>a", {
 			noremap = true,
 			silent = true,
 		})
