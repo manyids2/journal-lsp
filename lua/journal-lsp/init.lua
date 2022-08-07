@@ -56,6 +56,10 @@ M.setup = function()
 		actions.find_files(M.root_dir .. "/weekly", "~ weekly ~")
 	end
 
+	M.insert_link = function()
+		actions.insert_link()
+	end
+
 	M.goto_link = function()
 		actions.goto_link()
 	end
@@ -64,6 +68,8 @@ M.setup = function()
 		["<C-a>f"] = "files()",
 		["<C-a>d"] = "daily()",
 		["<C-a>w"] = "weekly()",
+		["<C-a>i"] = "insert_link()",
+		["<C-a>g"] = "goto_link()",
 	}
 
 	for k, v in pairs(mappings) do

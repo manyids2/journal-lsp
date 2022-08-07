@@ -37,9 +37,9 @@ function actions.insert_link()
 		a.nvim_buf_set_text(
 			0,
 			cursor[1] - 1,
-			cursor[2] + 1,
+			cursor[2] + 0,
 			cursor[1] - 1,
-			cursor[2] + 1,
+			cursor[2] + 0,
 			{ "[" .. input .. "](notes/" .. input .. ".md)" }
 		)
 	end)
@@ -48,16 +48,24 @@ end
 function actions.goto_link()
 	local ts_utils = require("nvim-treesitter.ts_utils")
 	local node = ts_utils.get_node_at_cursor()
-	local link = node.parent(node)
-	if link.type(node) == "inline_link" then
-		local text = vim.treesitter.query.get_node_text(link.child(link), 0)
-		local name = vim.split(text, "]")[1]
-		local path = vim.split(text, "]")[2]
-		name = name:sub(2, -1)
-		path = path:sub(2, -2)
-		if path then
-			vim.api.nvim_command("e " .. path)
-		end
+	local in_link = false
+	local destination = nil
+	if node:parent():type(node) == "inline_link" then
+		in_link = true
+		destination = ts_utils.get_named_children(node:parent())[2]
+	end
+	if node.type(node) == "inline_link" then
+		in_link = true
+		destination = ts_utils.get_named_children(node)[2]
+	end
+
+	if not in_link then
+		return
+	end
+
+	local path = vim.treesitter.query.get_node_text(destination, 0)
+	if path then
+		vim.api.nvim_command("e " .. path)
 	end
 end
 
