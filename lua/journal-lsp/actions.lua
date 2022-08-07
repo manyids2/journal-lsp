@@ -51,12 +51,12 @@ function actions.goto_link()
 	local link = node.parent(node)
 	if link.type(node) == "inline_link" then
 		local text = vim.treesitter.query.get_node_text(link.child(link), 0)
-    local name = vim.split(text, ']')[1]
-    local path = vim.split(text, ']')[2]
-    name = name:sub(2, -1)
-    path = path:sub(2, -2)
+		local name = vim.split(text, "]")[1]
+		local path = vim.split(text, "]")[2]
+		name = name:sub(2, -1)
+		path = path:sub(2, -2)
 		if path then
-      vim.api.nvim_command('e ' .. path)
+			vim.api.nvim_command("e " .. path)
 		end
 	end
 end
