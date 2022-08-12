@@ -30,12 +30,10 @@ M.setup = function()
 	if not (string.find(s, date) == nil) then
 		-- get the date
 		local _, _, y, m, d = string.find(s, "(%d+)-(%d+)-(%d+).md")
-		print(y, m, d)
-		print(M.root_dir)
 
 		-- TODO: get yesterday and tomorrow
-		M._yesterday = y .. "-" .. m .. "-" .. y .. ".md"
-		M._tomorrow = y .. "-" .. m .. "-" .. y .. ".md"
+		M._current = y .. "-" .. m .. "-" .. d .. ".md"
+		vim.notify("Current -> " .. M._current)
 	end
 
 	-- 4. init
@@ -64,11 +62,17 @@ M.setup = function()
 		actions.goto_link()
 	end
 
+	M.goto_today = function()
+		actions.goto_today()
+	end
+
+
 	local nmappings = {
 		["<C-a>f"] = "files()",
 		["<C-a>d"] = "daily()",
 		["<C-a>w"] = "weekly()",
 		["<C-a>g"] = "goto_link()",
+		["<C-a>t"] = "goto_today()",
 	}
 
 	local imappings = {

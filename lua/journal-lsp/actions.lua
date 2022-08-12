@@ -71,4 +71,9 @@ function actions.goto_link()
 	end
 end
 
+function actions.goto_today()
+	local today = vim.api.nvim_exec('echo strftime("daily/%Y-%m-%d.md")', true)
+	vim.api.nvim_exec("e " .. today, false)
+end
+
 return actions
