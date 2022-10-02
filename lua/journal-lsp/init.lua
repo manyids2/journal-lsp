@@ -32,8 +32,17 @@ M.setup = function()
 		local _, _, y, m, d = string.find(s, "(%d+)-(%d+)-(%d+).md")
 
 		-- TODO: get yesterday and tomorrow
-		M._current = y .. "-" .. m .. "-" .. d .. ".md"
-		vim.notify("Current -> " .. M._current)
+		local _current = y .. "-" .. m .. "-" .. d
+
+		local _past = vim.api.nvim_command_output("!ls " .. root_dir .. "/daily | grep " .. _current .. " -B 1")
+		_past = vim.split(_past, "\n")[3]
+
+		local _future = vim.api.nvim_command_output("!ls " .. root_dir .. "/daily | grep " .. _current .. " -A 1")
+		_future = vim.split(_future, "\n")[4]
+
+		vim.notify("Past -> " .. _past)
+		vim.notify("Current -> " .. _current)
+		vim.notify("Future -> " .. _future)
 	end
 
 	-- 4. init
@@ -66,6 +75,35 @@ M.setup = function()
 		actions.goto_today()
 	end
 
+	M.goto_past = function()
+		-- 3. is it 'daily' or 'weekly' note?
+		s = vim.fs.basename(vim.api.nvim_buf_get_name(0))
+		date = "%d+-%d+-%d+.md"
+		if not (string.find(s, date) == nil) then
+			local _, _, y, m, d = string.find(s, "(%d+)-(%d+)-(%d+).md")
+			local _current = y .. "-" .. m .. "-" .. d
+			local _past = vim.api.nvim_command_output("!ls " .. root_dir .. "/daily | grep " .. _current .. " -B 1")
+			_past = vim.split(_past, "\n")[3]
+			if _past then
+				actions.goto_date(M.root_dir, _past)
+			end
+		end
+	end
+
+	M.goto_future = function()
+		-- 3. is it 'daily' or 'weekly' note?
+		s = vim.fs.basename(vim.api.nvim_buf_get_name(0))
+		date = "%d+-%d+-%d+.md"
+		if not (string.find(s, date) == nil) then
+			local _, _, y, m, d = string.find(s, "(%d+)-(%d+)-(%d+).md")
+			local _current = y .. "-" .. m .. "-" .. d
+			local _future = vim.api.nvim_command_output("!ls " .. root_dir .. "/daily | grep " .. _current .. " -A 1")
+			_future = vim.split(_future, "\n")[4]
+			if _future then
+				actions.goto_date(M.root_dir, _future)
+			end
+		end
+	end
 
 	local nmappings = {
 		["<C-a>f"] = "files()",
@@ -73,6 +111,8 @@ M.setup = function()
 		["<C-a>w"] = "weekly()",
 		["<C-a>g"] = "goto_link()",
 		["<C-a>t"] = "goto_today()",
+		["<C-Up>"] = "goto_past()",
+		["<C-Down>"] = "goto_future()",
 	}
 
 	local imappings = {

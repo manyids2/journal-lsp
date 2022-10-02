@@ -76,4 +76,8 @@ function actions.goto_today()
 	vim.api.nvim_exec("e " .. today, false)
 end
 
+function actions.goto_date(root_dir, datemd)
+	vim.api.nvim_exec("e " .. root_dir .. "/daily/" .. datemd, false)
+end
+
 return actions
